@@ -1,0 +1,6 @@
+{
+  "name": "SkillBridge AI",
+  "description": "AI-assisted career companion engineered for technical students. Created by Manav Parmar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

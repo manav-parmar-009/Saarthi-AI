@@ -1,18 +1,23 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig, type Plugin } from 'vite';
-import { handleGeminiApi } from './server/geminiHandler.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function geminiServerPlugin(): Plugin {
   return {
     name: 'gemini-server-plugin',
-    configureServer(server) {
+    async configureServer(server) {
+      const { handleGeminiApi } = await import('./server/geminiHandler.ts');
       server.middlewares.use('/api/gemini', (req, res) => {
         handleGeminiApi(req, res);
       });
     },
-    configurePreviewServer(server) {
+    async configurePreviewServer(server) {
+      const { handleGeminiApi } = await import('./server/geminiHandler.ts');
       server.middlewares.use('/api/gemini', (req, res) => {
         handleGeminiApi(req, res);
       });
@@ -22,10 +27,11 @@ function geminiServerPlugin(): Plugin {
 
 export default defineConfig(() => {
   return {
+    root: __dirname,
     plugins: [react(), tailwindcss(), geminiServerPlugin()],
     resolve: {
       alias: {
-        '@': path.resolve(import.meta.dirname ?? '.', '.'),
+        '@': path.resolve(__dirname, 'src'),
       },
     },
     server: {
